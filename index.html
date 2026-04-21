@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Video Slide Mockup</title>
+        <style>
+            body {
+                margin: 0;
+                background: #111;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                font-family: sans-serif;
+            }
+            .slider {
+                width: 1280px;
+                height: 756px;
+                position: relative;
+                overflow: hidden;
+                background: #000;
+            }
+            video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .overlay {
+                position: absolute;
+                inset: 0;
+                background: rgba(0,0,0,0.35);
+                transition: opacity 0.4s ease;
+                pointer-events: none;
+            }
+            .overlay.hidden {
+                opacity: 0;
+            }
+            .bottom-image {
+                position: absolute;
+                bottom: 48px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 1182px;
+                height: 222px;
+                object-fit: cover;
+                opacity: .8;
+            }
+            .sound-btn {
+                position: absolute;
+                top: 56px;
+                right: 40px;
+                width: 40px;
+                height: 40px;
+                background: rgba(0,0,0,0.3);
+                border-radius: 12px;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                font-size: 20px;
+                transition: transform 0.2s ease, background 0.2s ease;
+            }
+            .sound-btn:hover {
+                transform: scale(1.1);
+                background: rgba(0,0,0,0.7);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="slider">
+            <video id="video" muted autoplay>
+                <source src="./Panda_waving_on_202604211016.mp4" type="video/mp4">
+            </video>
+            <div class="overlay" id="overlay"></div>
+            <div class="sound-btn" id="soundBtn"></div>
+            <img class="bottom-image" src="./image_2026-04-21_11-36-43.png" alt="">
+        </div>
+
+        <script>
+            const soundOnIcon = `
+                <svg version="1.0" width="24" height="24" viewBox="0 0 74 74">
+                    <path d="M39.389,13.769 L22.235,28.606 L6,28.606 L6,47.699 L21.989,47.699 L39.389,62.75 L39.389,13.769z" style="stroke:#eee;stroke-width:5;stroke-linejoin:round;fill:#eee;"/>
+                    <path d="M48,27.6a19.5,19.5 0 0 1 0,21.4M55.1,20.5a30,30 0 0 1 0,35.6M61.6,14a38.8,38.8 0 0 1 0,48.6" style="fill:none;stroke:#eee;stroke-width:5;stroke-linecap:round"/>
+                </svg>`;
+            const soundOffIcon = `
+                <svg version="1.0" width="24" height="24" viewBox="0 0 74 74" stroke="#eee" stroke-width="5">
+                    <path d="m39,14-17,15H6V48H22l17,15z" fill="#eee" stroke-linejoin="round"/>
+                    <path d="m49,26 20,24m0-24-20,24" fill="none" stroke-linecap="round"/>
+                </svg>`;
+
+            const video = document.getElementById('video');
+            const overlay = document.getElementById('overlay');
+            const btn = document.getElementById('soundBtn');
+            let soundOn = false;
+            btn.innerHTML = soundOffIcon;
+
+            video.muted = true;
+            video.currentTime = 0;
+            video.play();
+
+            btn.addEventListener('click', () => {
+                if (!soundOn) {
+                    soundOn = true;
+                    overlay.classList.add('hidden');
+                    video.currentTime = 0;
+                    video.muted = false;
+                    video.play();
+                    btn.innerHTML = soundOnIcon;
+                } else {
+                    soundOn = false;
+                    overlay.classList.remove('hidden');
+                    video.currentTime = 0;
+                    video.muted = true;
+                    video.play();
+                    btn.innerHTML = soundOffIcon;
+                }
+            });
+
+            video.addEventListener('ended', () => {
+                soundOn = false;
+                overlay.classList.remove('hidden');
+                video.currentTime = 0;
+                video.muted = true;
+                video.play();
+                btn.innerHTML = soundOffIcon;
+            });
+        </script>
+    </body>
+</html>
